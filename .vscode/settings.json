@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "x86.h": "c",
+        "kdebug.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "Enabled"
+}
