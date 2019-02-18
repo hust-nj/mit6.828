@@ -103,7 +103,18 @@ boot_alloc(uint32_t n)
 	//
 	// LAB 2: Your code here.
 
-	return NULL;
+	if(n == 0)
+		return nextfree;
+	else{
+		char *addr = nextfree;
+		nextfree = ROUNDUP(n, PGSIZE) + nextfree;
+		if(PADDR(nextfree) > 0x400000 || nextfree < addr)
+			panic("boot_alloc out of range!");
+		//note to use the physic address
+		return addr;
+	}
+
+	// return NULL;
 }
 
 // Set up a two-level page table:
@@ -125,7 +136,7 @@ mem_init(void)
 	i386_detect_memory();
 
 	// Remove this line when you're ready to test this function.
-	panic("mem_init: This function is not finished\n");
+	// panic("mem_init: This function is not finished\n");
 
 	//////////////////////////////////////////////////////////////////////
 	// create initial page directory.
@@ -148,7 +159,9 @@ mem_init(void)
 	// array.  'npages' is the number of physical pages in memory.  Use memset
 	// to initialize all fields of each struct PageInfo to 0.
 	// Your code goes here:
-
+	uint32_t pages_sz = sizeof(struct PageInfo) * npages;
+	pages = (struct PageInfo *)boot_alloc(pages_sz);
+	memset(pages, 0, pages_sz);
 
 	//////////////////////////////////////////////////////////////////////
 	// Now that we've allocated the initial kernel data structures, we set
@@ -172,6 +185,7 @@ mem_init(void)
 	//      (ie. perm = PTE_U | PTE_P)
 	//    - pages itself -- kernel RW, user NONE
 	// Your code goes here:
+	boot_map_region(kern_pgdir,UPAGES,pages_sz,PADDR(pages),PTE_U | PTE_P);
 
 	//////////////////////////////////////////////////////////////////////
 	// Use the physical memory that 'bootstack' refers to as the kernel
@@ -252,7 +266,13 @@ page_init(void)
 	// NB: DO NOT actually touch the physical memory corresponding to
 	// free pages!
 	size_t i;
-	for (i = 0; i < npages; i++) {
+	for (i = 1; i < npages_basemem; i++) {
+		pages[i].pp_ref = 0;
+		pages[i].pp_link = page_free_list;
+		page_free_list = &pages[i];
+	}
+	for(i = PADDR(boot_alloc(0)) / PGSIZE; i < npages; i++)
+	{
 		pages[i].pp_ref = 0;
 		pages[i].pp_link = page_free_list;
 		page_free_list = &pages[i];
@@ -327,6 +347,7 @@ pte_t *
 pgdir_walk(pde_t *pgdir, const void *va, int create)
 {
 	// Fill this function in
+	
 	return NULL;
 }
 
@@ -345,6 +366,11 @@ static void
 boot_map_region(pde_t *pgdir, uintptr_t va, size_t size, physaddr_t pa, int perm)
 {
 	// Fill this function in
+	size_t page_num = PGNUM(ROUNDUP(size, PGSIZE));
+	for(size_t i = 0; i < page_num; ++i)
+	{
+		
+	}
 }
 
 //
