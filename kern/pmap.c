@@ -452,7 +452,6 @@ page_insert(pde_t *pgdir, struct PageInfo *pp, void *va, int perm)
 	if(*pte_addr & PTE_P)//page already mapped
 		page_remove(pgdir, va);
 	*pte_addr = page2pa(pp) | perm | PTE_P;
-	pgdir[PDX(va)] = pgdir[PDX(va)] | perm;
 	return 0;
 }
 
