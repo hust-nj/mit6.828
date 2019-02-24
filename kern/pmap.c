@@ -604,6 +604,15 @@ mmio_map_region(physaddr_t pa, size_t size)
 	// Hint: The staff solution uses boot_map_region.
 	//
 	// Your code here:
+	if(base + size > MMIOLIM)
+		panic("mmio memory out of range.");
+	uint32_t va = base;
+	pa = ROUNDDOWN((uint32_t)pa, PGSIZE);
+	size = ROUNDUP(pa + size, PGSIZE) - pa;
+	
+	boot_map_region(kern_pgdir, base, size ,pa, PTE_PCD|PTE_PWT|PTE_W);
+	base += size;
+	return (void *)va;
 	panic("mmio_map_region not implemented");
 }
 
