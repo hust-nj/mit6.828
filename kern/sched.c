@@ -29,6 +29,22 @@ sched_yield(void)
 	// below to halt the cpu.
 
 	// LAB 4: Your code here.
+	int cur_id;
+	struct Env *p;
+	if(curenv)//there is an env run
+		cur_id = ENVX(curenv->env_id);
+	else
+		cur_id = 0;
+		
+	for(int i = 0; i < NENV; ++i)
+	{
+		p = envs + (i + cur_id) % NENV;
+		if(p->env_status == ENV_RUNNABLE)
+			env_run(p);
+	}//first step: search
+
+	if(curenv && curenv->env_status == ENV_RUNNING)
+		env_run(curenv);
 
 	// sched_halt never returns
 	sched_halt();

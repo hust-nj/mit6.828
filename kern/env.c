@@ -533,7 +533,10 @@ env_run(struct Env *e)
 	curenv->env_runs++;//times run
 	lcr3(PADDR(curenv->env_pgdir));//switch pgdir
 
+	unlock_kernel();//into user env
+
 	//step2
+	// cprintf("start pop env tf --------------------------------------------------\n");
 	env_pop_tf(&(e->env_tf));//switch register
 
 	panic("env_run not yet implemented");
