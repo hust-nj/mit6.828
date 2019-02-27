@@ -350,6 +350,36 @@ page_fault_handler(struct Trapframe *tf)
 	//   (the 'tf' variable points at 'curenv->env_tf').
 
 	// LAB 4: Your code here.
+	struct UTrapframe *utf;
+	uint32_t uxesp;
+
+	//  If the user environment is already running on the user exception 
+	// stack when an exception occurs, then the page fault handler itself 
+	// has faulted. In this case, you should start the new stack frame 
+	// just under the current tf->tf_esp rather than at UXSTACKTOP. 
+	// You should first push an empty 32-bit word, then a struct UTrapframe. 
+	if(tf->tf_esp <= UXSTACKTOP - 1 && tf->tf_esp >= UXSTACKTOP - PGSIZE)
+		uxesp = tf->tf_esp - sizeof(struct UTrapframe) - 4;
+	else 
+		uxesp = UXSTACKTOP - sizeof(struct UTrapframe);
+
+	if(curenv->env_pgfault_upcall)//page fault upcall exists
+	{
+		// check permision
+		user_mem_assert(curenv, (void *)uxesp, sizeof(struct UTrapframe), PTE_U | PTE_P | PTE_W);
+
+		utf = (struct UTrapframe *)uxesp;
+		utf->utf_fault_va = fault_va;
+		utf->utf_err = tf->tf_err;
+		utf->utf_regs = tf->tf_regs;
+		utf->utf_eflags = tf->tf_eflags;
+		utf->utf_eip = tf->tf_eip;
+		utf->utf_esp = tf->tf_esp;
+
+		tf->tf_esp = uxesp;
+		tf->tf_eip = (uint32_t)curenv->env_pgfault_upcall;		
+		env_run(curenv);
+	}
 
 	// Destroy the environment that caused the fault.
 	cprintf("[%08x] user fault va %08x ip %08x\n",
