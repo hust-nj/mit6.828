@@ -92,26 +92,59 @@ trap_init(void)
 	extern void T_SIMDERR_handler();
 	extern void T_SYSCALL_handler();
 
-	SETGATE(idt[T_DIVIDE], 1, GD_KT, T_DIVIDE_handler, 0);
-	SETGATE(idt[T_DEBUG], 1, GD_KT, T_DEBUG_handler, 0);
-	SETGATE(idt[T_NMI],   1, GD_KT, T_NMI_handler, 0);
-	SETGATE(idt[T_BRKPT], 1, GD_KT, T_BRKPT_handler, 3);
-	SETGATE(idt[T_OFLOW], 1, GD_KT, T_OFLOW_handler, 0);
-	SETGATE(idt[T_BOUND], 1, GD_KT, T_BOUND_handler, 0);
-	SETGATE(idt[T_ILLOP], 1, GD_KT, T_ILLOP_handler, 0);
-	SETGATE(idt[T_DEVICE], 1, GD_KT, T_DEVICE_handler, 0);
-	SETGATE(idt[T_DBLFLT], 1, GD_KT, T_DBLFLT_handler, 0);
-	SETGATE(idt[T_TSS]   , 1, GD_KT, T_TSS_handler, 0);
-	SETGATE(idt[T_SEGNP], 1, GD_KT, T_SEGNP_handler, 0);
-	SETGATE(idt[T_STACK], 1, GD_KT, T_STACK_handler, 0);
-	SETGATE(idt[T_GPFLT], 1, GD_KT, T_GPFLT_handler, 0);
-	SETGATE(idt[T_PGFLT], 1, GD_KT, T_PGFLT_handler, 0);
-	SETGATE(idt[T_FPERR], 1, GD_KT, T_FPERR_handler, 0);
-	SETGATE(idt[T_ALIGN], 1, GD_KT, T_ALIGN_handler, 0);
-	SETGATE(idt[T_MCHK],  1, GD_KT, T_MCHK_handler, 0);
-	SETGATE(idt[T_SIMDERR], 1, GD_KT, T_SIMDERR_handler, 0);
-	SETGATE(idt[T_SYSCALL], 1, GD_KT, T_SYSCALL_handler, 3);
+	SETGATE(idt[T_DIVIDE], 0, GD_KT, T_DIVIDE_handler, 0);
+	SETGATE(idt[T_DEBUG], 0, GD_KT, T_DEBUG_handler, 0);
+	SETGATE(idt[T_NMI],   0, GD_KT, T_NMI_handler, 0);
+	SETGATE(idt[T_BRKPT], 0, GD_KT, T_BRKPT_handler, 3);
+	SETGATE(idt[T_OFLOW], 0, GD_KT, T_OFLOW_handler, 0);
+	SETGATE(idt[T_BOUND], 0, GD_KT, T_BOUND_handler, 0);
+	SETGATE(idt[T_ILLOP], 0, GD_KT, T_ILLOP_handler, 0);
+	SETGATE(idt[T_DEVICE], 0, GD_KT, T_DEVICE_handler, 0);
+	SETGATE(idt[T_DBLFLT], 0, GD_KT, T_DBLFLT_handler, 0);
+	SETGATE(idt[T_TSS]   , 0, GD_KT, T_TSS_handler, 0);
+	SETGATE(idt[T_SEGNP], 0, GD_KT, T_SEGNP_handler, 0);
+	SETGATE(idt[T_STACK], 0, GD_KT, T_STACK_handler, 0);
+	SETGATE(idt[T_GPFLT], 0, GD_KT, T_GPFLT_handler, 0);
+	SETGATE(idt[T_PGFLT], 0, GD_KT, T_PGFLT_handler, 0);
+	SETGATE(idt[T_FPERR], 0, GD_KT, T_FPERR_handler, 0);
+	SETGATE(idt[T_ALIGN], 0, GD_KT, T_ALIGN_handler, 0);
+	SETGATE(idt[T_MCHK],  0, GD_KT, T_MCHK_handler, 0);
+	SETGATE(idt[T_SIMDERR], 0, GD_KT, T_SIMDERR_handler, 0);
+	SETGATE(idt[T_SYSCALL], 0, GD_KT, T_SYSCALL_handler, 3);
 
+	void IRQ_0_handler();
+    void IRQ_1_handler();
+    void IRQ_2_handler();
+    void IRQ_3_handler();
+    void IRQ_4_handler();
+    void IRQ_5_handler();
+    void IRQ_6_handler();
+    void IRQ_7_handler();
+    void IRQ_8_handler();
+    void IRQ_9_handler();
+    void IRQ_10_handler();
+    void IRQ_11_handler();
+    void IRQ_12_handler();
+    void IRQ_13_handler();
+    void IRQ_14_handler();
+    void IRQ_15_handler();
+
+	SETGATE(idt[IRQ_OFFSET + 0], 0, GD_KT, IRQ_0_handler, 0);
+	SETGATE(idt[IRQ_OFFSET + 1], 0, GD_KT, IRQ_1_handler, 0);
+	SETGATE(idt[IRQ_OFFSET + 2], 0, GD_KT, IRQ_2_handler, 0);
+	SETGATE(idt[IRQ_OFFSET + 3], 0, GD_KT, IRQ_3_handler, 0);
+	SETGATE(idt[IRQ_OFFSET + 4], 0, GD_KT, IRQ_4_handler, 0);
+	SETGATE(idt[IRQ_OFFSET + 5], 0, GD_KT, IRQ_5_handler, 0);
+	SETGATE(idt[IRQ_OFFSET + 6], 0, GD_KT, IRQ_6_handler, 0);
+	SETGATE(idt[IRQ_OFFSET + 7], 0, GD_KT, IRQ_7_handler, 0);
+	SETGATE(idt[IRQ_OFFSET + 8], 0, GD_KT, IRQ_8_handler, 0);
+	SETGATE(idt[IRQ_OFFSET + 9], 0, GD_KT, IRQ_9_handler, 0);
+	SETGATE(idt[IRQ_OFFSET + 10], 0, GD_KT, IRQ_10_handler, 0);
+	SETGATE(idt[IRQ_OFFSET + 11], 0, GD_KT, IRQ_11_handler, 0);
+	SETGATE(idt[IRQ_OFFSET + 12], 0, GD_KT, IRQ_12_handler, 0);
+	SETGATE(idt[IRQ_OFFSET + 13], 0, GD_KT, IRQ_13_handler, 0);
+	SETGATE(idt[IRQ_OFFSET + 14], 0, GD_KT, IRQ_14_handler, 0);
+	SETGATE(idt[IRQ_OFFSET + 15], 0, GD_KT, IRQ_15_handler, 0);
 	// Per-CPU setup 
 	trap_init_percpu();
 }
@@ -227,6 +260,10 @@ trap_dispatch(struct Trapframe *tf)
 			pr->reg_eax = syscall(pr->reg_eax, pr->reg_edx, pr->reg_ecx,
 				pr->reg_ebx, pr->reg_edi, pr->reg_esi);
 			// cprintf("call syscall ------------------------------------------------");
+			break;
+		case IRQ_OFFSET:
+			lapic_eoi();
+			sched_yield();
 			break;
 		default:
 			// Unexpected trap: The user process or the kernel has a bug.
