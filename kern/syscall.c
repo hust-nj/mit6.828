@@ -187,7 +187,7 @@ sys_page_alloc(envid_t envid, void *va, int perm)
 	if((uint32_t)va >= UTOP || (uint32_t)va % PGSIZE)
 		return -E_INVAL;
 	//check the perm
-	if(perm & ~PTE_SYSCALL)
+	if((perm & ~PTE_SYSCALL) || !(perm & PTE_U) || !(perm & PTE_P))
 	{
 		cprintf("the permision bits wrong in sys_page_alloc\n");
 		return -E_INVAL;
@@ -255,7 +255,7 @@ sys_page_map(envid_t srcenvid, void *srcva,
 		return -E_INVAL;
 
 	// check the permision bits
-	if(perm & ~PTE_SYSCALL)
+	if((perm & ~PTE_SYSCALL) || !(perm & PTE_U) || !(perm & PTE_P))
 		return -E_INVAL;
 
 	// read-noly src not permit write map
